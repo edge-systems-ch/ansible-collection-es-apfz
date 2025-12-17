@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: pip install ansible-core
 
-      - name: Import GPG key
+      - name: Import GPG Private Key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.ANSIBLE_GPG_PRIVATE_KEY }}
@@ -42,6 +42,13 @@ jobs:
         run: |
           FILE=$(ls es-apfz-*.tar.gz)
           echo "${{ secrets.ANSIBLE_GPG_PASSPHRASE }}" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --detach-sign --armor "$FILE"
+
+      - name: Verify Signature (Self-Test)
+        run: |
+          FILE=$(ls es-apfz-*.tar.gz)
+          # We import the public key you stored in the repo to verify the work
+          gpg --import keys/public.key
+          gpg --verify "$FILE.asc" "$FILE"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
