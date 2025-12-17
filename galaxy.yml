@@ -1,0 +1,25 @@
+namespace: es
+name: apfz
+version: 0.0.0 # Note: Will be replaced with tag in CI
+authors:
+  - Edge Systems
+description: Collection for APFZ system automation
+repository: https://github.com/edge-systems-ch/ansible-collection-es-apfz.git
+readme: README.md
+license:
+  - GPL-3.0-or-later
+tags:
+  - hirschmann
+  - octopus
+  - networking
+  - apfz
+  - industrial
+  - rail
+
+# This ensures the .git and .github folders aren't included in the final artifact
+build_ignore:
+  - .github
+  - .git
+  - "*.pyc"
+  - "__pycache__"
+  - examples/

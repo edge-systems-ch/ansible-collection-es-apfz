@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Edge Systems
+  description: APFZ System Management Modules.
+  company: Edge Systems
+  license: GPL-3.0-or-later
+  min_ansible_version: "2.14"
+  platforms:
+    - name: GenericLinux
+      versions:
+        - all
+
+# dependencies:
+  # If you ever need modules from other collections (like ansible.netcommon),
+  # you would list them here.
+  # Example:
+  # ansible.netcommon: ">=5.0.0"

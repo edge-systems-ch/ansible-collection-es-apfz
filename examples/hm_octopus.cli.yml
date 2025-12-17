@@ -1,0 +1,35 @@
+---
+- name: Hirschmann Octopus Switch - Ansible CLI Demo
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: Octopus 1
+      hm_octopus_cli:
+        host: 192.168.0.31
+        user: admin
+        password: TopSecret,Man!
+        lines:
+          - "show sysinfo"
+          - "enable"
+          - "show telnetcon"
+          - "telnetcon maxsessions 4"
+          - "configure"
+          - "address-conflict ongoing-detection enable"
+          - "show eventlog"
+        save: true
+
+    - name: Octopus 2
+      hm_octopus_cli:
+        host: 172.22.65.17
+        user: admin
+        password: TopSecret,Man!
+        lines:
+          - "enable"
+          - "configure"
+          - "show telnet"
+          - "telnet max-sessions 5"
+          - "show eventlog"
+        save: true
+...
