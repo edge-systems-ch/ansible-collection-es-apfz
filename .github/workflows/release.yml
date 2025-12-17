@@ -19,8 +19,13 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install ansible-core
+        run: pip install ansible-core
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.ANSIBLE_GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.ANSIBLE_GPG_PASSPHRASE }}
 
       - name: Sync version from Tag to galaxy.yml
         run: |
@@ -33,13 +38,18 @@ jobs:
       - name: Build Collection
         run: ansible-galaxy collection build --force
 
+      - name: Sign Collection
+        run: |
+          FILE=$(ls es-apfz-*.tar.gz)
+          echo "${{ secrets.ANSIBLE_GPG_PASSPHRASE }}" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --detach-sign --armor "$FILE"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          # Use a wildcard to find the generated tar.gz
-          files: es-apfz-*.tar.gz
+          files: |
+            es-apfz-*.tar.gz
+            es-apfz-*.tar.gz.asc
           generate_release_notes: true
-          # This ensures the release name is the version number
           name: Release ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
         env:
